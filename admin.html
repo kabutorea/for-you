@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>for you. — admin</title>
+
+  <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+  <!-- LOGIN -->
+
+  <section id="loginSection" class="login-section">
+
+    <div class="login-card">
+
+      <div class="login-symbol">✦</div>
+
+      <h1>for you.</h1>
+
+      <p class="login-subtitle">
+        private archive
+      </p>
+
+      <form id="loginForm">
+
+        <div class="field">
+          <label for="emailInput">email</label>
+
+          <input
+            id="emailInput"
+            type="email"
+            placeholder="your email"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="passwordInput">password</label>
+
+          <input
+            id="passwordInput"
+            type="password"
+            placeholder="your password"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <button
+          id="loginButton"
+          type="submit"
+          class="primary-button"
+        >
+          Login
+        </button>
+
+        <p id="loginMessage" class="message"></p>
+
+      </form>
+
+    </div>
+
+  </section>
+
+
+  <!-- ADMIN -->
+
+  <section
+    id="adminSection"
+    class="admin-section hidden"
+  >
+
+    <div class="admin-container">
+
+      <header class="admin-header">
+
+        <div>
+          <p class="eyebrow">
+            private archive
+          </p>
+
+          <h1>for you.</h1>
+
+          <p class="header-description">
+            write something worth keeping.
+          </p>
+        </div>
+
+        <button
+          id="logoutButton"
+          type="button"
+          class="logout-button"
+        >
+          Log out
+        </button>
+
+      </header>
+
+
+      <main class="admin-grid">
+
+        <!-- EDITOR -->
+
+        <section class="panel">
+
+          <div class="panel-heading">
+
+            <p class="panel-number">
+              01
+            </p>
+
+            <div>
+              <h2>New letter</h2>
+
+              <p>
+                create something for the archive.
+              </p>
+            </div>
+
+          </div>
+
+
+          <form id="letterForm">
+
+            <input
+              id="letterId"
+              type="hidden"
+            >
+
+
+            <div class="field">
+
+              <label for="letterDate">
+                date
+              </label>
+
+              <input
+                id="letterDate"
+                type="date"
+                required
+              >
+
+            </div>
+
+
+            <div class="field">
+
+              <label for="letterTitle">
+                title
+              </label>
+
+              <input
+                id="letterTitle"
+                type="text"
+                placeholder="a title"
+                maxlength="200"
+                required
+              >
+
+            </div>
+
+
+            <div class="field">
+
+              <label for="letterText">
+                letter
+              </label>
+
+              <textarea
+                id="letterText"
+                placeholder="write something..."
+                required
+              ></textarea>
+
+            </div>
+
+
+            <label class="publish-option">
+
+              <input
+                id="letterPublished"
+                type="checkbox"
+                checked
+              >
+
+              <span>
+                publish this letter
+              </span>
+
+            </label>
+
+
+            <div class="form-buttons">
+
+              <button
+                id="saveButton"
+                type="submit"
+                class="primary-button"
+              >
+                Save letter
+              </button>
+
+              <button
+                id="cancelButton"
+                type="button"
+                class="secondary-button hidden"
+              >
+                Cancel
+              </button>
+
+            </div>
+
+
+            <p
+              id="formMessage"
+              class="message"
+            ></p>
+
+          </form>
+
+        </section>
+
+
+        <!-- LETTERS -->
+
+        <section class="panel">
+
+          <div class="panel-heading">
+
+            <p class="panel-number">
+              02
+            </p>
+
+            <div>
+              <h2>Letters</h2>
+
+              <p>
+                everything in your archive.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div
+            id="lettersList"
+            class="letters-list"
+          >
+
+            <div class="loading">
+              loading...
+            </div>
+
+          </div>
+
+        </section>
+
+      </main>
+
+    </div>
+
+  </section>
+
+
+  <!-- SUPABASE -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- ADMIN JS -->
+
+  <script src="admin.js"></script>
+
+</body>
+</html>

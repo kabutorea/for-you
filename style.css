@@ -1,0 +1,1708 @@
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 44%,
+            #241c18 0%,
+            #171210 40%,
+            #0c0a09 76%,
+            #050505 100%
+        );
+
+    color: #e8dfd5;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   ATMOSPHERE
+========================================================= */
+
+.atmosphere {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 0;
+
+    pointer-events: none;
+
+    overflow: hidden;
+}
+
+.atmosphere-light {
+    position: absolute;
+
+    left: 50%;
+    top: 48%;
+
+    width: 700px;
+    height: 700px;
+
+    transform:
+        translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(105, 65, 43, 0.12),
+            rgba(65, 40, 30, 0.04) 45%,
+            transparent 73%
+        );
+
+    filter: blur(20px);
+
+    animation:
+        atmosphereBreath
+        12s
+        ease-in-out
+        infinite;
+}
+
+.fog {
+    position: absolute;
+
+    width: 65vw;
+    height: 35vh;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(110, 85, 70, 0.045),
+            transparent 72%
+        );
+
+    filter: blur(50px);
+
+    opacity: 0.4;
+}
+
+.fog-left {
+    left: -10%;
+    top: 28%;
+
+    animation:
+        fogLeft
+        23s
+        ease-in-out
+        infinite;
+}
+
+.fog-right {
+    right: -10%;
+    bottom: 12%;
+
+    animation:
+        fogRight
+        27s
+        ease-in-out
+        infinite;
+}
+
+.grain {
+    position: absolute;
+
+    inset: 0;
+
+    opacity: 0.028;
+
+    background-image:
+        radial-gradient(
+            rgba(255,255,255,0.5) 0.4px,
+            transparent 0.5px
+        );
+
+    background-size: 4px 4px;
+
+    mix-blend-mode: soft-light;
+}
+
+
+/* =========================================================
+   ROSE SCENE
+========================================================= */
+
+.rose-scene {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 5;
+
+    overflow: hidden;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   VINES
+========================================================= */
+
+.vine {
+    position: absolute;
+
+    top: -3%;
+
+    width: 350px;
+    height: 106%;
+
+    z-index: 10;
+
+    opacity: 0.84;
+
+    filter:
+        drop-shadow(
+            0 30px 30px
+            rgba(0,0,0,0.65)
+        );
+}
+
+.vine img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    filter:
+        brightness(0.58)
+        saturate(0.78)
+        contrast(1.08);
+}
+
+.vine-left {
+    left: -95px;
+
+    animation:
+        vineLeft
+        11s
+        ease-in-out
+        infinite;
+}
+
+.vine-right {
+    right: -95px;
+
+    transform:
+        scaleX(-1);
+
+    animation:
+        vineRight
+        13s
+        ease-in-out
+        infinite;
+}
+
+
+/* =========================================================
+   BLOOMS
+========================================================= */
+
+.bloom {
+    position: absolute;
+
+    z-index: 30;
+
+    width: 82px;
+    height: 100px;
+
+    transform-origin:
+        50% 85%;
+
+    animation:
+        bloomSway
+        6.5s
+        ease-in-out
+        infinite;
+}
+
+.bloom-stem {
+    position: absolute;
+
+    left: 50%;
+    bottom: -16px;
+
+    width: 4px;
+    height: 30px;
+
+    transform:
+        translateX(-50%)
+        rotate(7deg);
+
+    border-radius: 100%;
+
+    background:
+        linear-gradient(
+            to right,
+            #24311d,
+            #63422a,
+            #24311d
+        );
+
+    z-index: 1;
+}
+
+
+/* =========================================================
+   BLOOM STAGES
+========================================================= */
+
+.stage {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    transform:
+        translate(-50%, -50%);
+
+    z-index: 2;
+
+    transition:
+        opacity 1s ease,
+        transform 1.35s
+        cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        ),
+        filter 1.35s ease;
+}
+
+.stage-closed {
+    opacity: 1;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1);
+
+    filter:
+        brightness(0.67)
+        saturate(0.82);
+}
+
+.stage-swelling {
+    opacity: 0;
+
+    transform:
+        translate(-50%, -50%)
+        scale(0.83);
+
+    filter:
+        brightness(0.7)
+        saturate(0.85)
+        blur(1px);
+}
+
+.stage-opening {
+    opacity: 0;
+
+    transform:
+        translate(-50%, -50%)
+        scale(0.77);
+
+    filter:
+        brightness(0.72)
+        saturate(0.9)
+        blur(1px);
+}
+
+.stage-open {
+    opacity: 0;
+
+    transform:
+        translate(-50%, -50%)
+        scale(0.76);
+
+    filter:
+        brightness(0.74)
+        saturate(0.88)
+        blur(1.5px);
+}
+
+
+/* =========================================================
+   BLOOM LOCATIONS
+========================================================= */
+
+.bloom-1 {
+    left: 150px;
+    top: 12%;
+}
+
+.bloom-2 {
+    right: 150px;
+    top: 17%;
+}
+
+.bloom-3 {
+    left: 125px;
+    top: 42%;
+}
+
+.bloom-4 {
+    right: 128px;
+    top: 47%;
+}
+
+.bloom-5 {
+    left: 162px;
+    bottom: 10%;
+}
+
+.bloom-6 {
+    right: 160px;
+    bottom: 9%;
+}
+
+
+/* =========================================================
+   BLOOM ANIMATION STATES
+========================================================= */
+
+.bloom.is-swelling .stage-closed {
+    opacity: 0;
+
+    transform:
+        translate(-50%, -50%)
+        scale(0.88);
+
+    filter:
+        brightness(0.58)
+        saturate(0.72)
+        blur(0.4px);
+}
+
+.bloom.is-swelling .stage-swelling {
+    opacity: 1;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1.02);
+
+    filter:
+        brightness(0.8)
+        saturate(0.92)
+        blur(0);
+}
+
+.bloom.is-opening .stage-swelling {
+    opacity: 0;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1.07);
+}
+
+.bloom.is-opening .stage-opening {
+    opacity: 1;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1.02);
+
+    filter:
+        brightness(0.84)
+        saturate(0.97)
+        blur(0);
+}
+
+.bloom.is-open .stage-opening {
+    opacity: 0;
+
+    transform:
+        translate(-50%, -50%)
+        scale(0.95);
+}
+
+.bloom.is-open .stage-open {
+    opacity: 1;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1.03);
+
+    filter:
+        brightness(0.91)
+        saturate(1.04)
+        blur(0)
+        drop-shadow(
+            0 10px 17px
+            rgba(72,0,8,0.4)
+        );
+}
+
+
+/* =========================================================
+   SCREENS
+========================================================= */
+
+.screen {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 50;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.85s ease,
+        visibility 0.85s ease;
+}
+
+.screen.active {
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+.screen-content {
+    width: min(680px, 86vw);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    text-align: center;
+
+    transition:
+        opacity 0.7s ease,
+        transform 0.7s ease;
+}
+
+.screen-content.fade-out {
+    opacity: 0;
+
+    transform:
+        translateY(-16px);
+}
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+.date {
+    margin-bottom: 30px;
+
+    color: #766d64;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 10px;
+
+    letter-spacing: 5px;
+}
+
+h1 {
+    margin-bottom: 20px;
+
+    color: #ece3d8;
+
+    font-size:
+        clamp(60px, 8vw, 105px);
+
+    font-weight: normal;
+
+    line-height: 0.95;
+
+    letter-spacing: 3px;
+}
+
+.subtitle {
+    margin-bottom: 43px;
+
+    color: #928980;
+
+    font-size: 15px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   ENTER
+========================================================= */
+
+.enter-button {
+    position: relative;
+
+    padding:
+        14px 25px;
+
+    background: transparent;
+
+    border: none;
+
+    color: #c8beb4;
+
+    font-family: Georgia, serif;
+
+    font-size: 12px;
+
+    letter-spacing: 4px;
+
+    cursor: pointer;
+}
+
+.enter-button::before,
+.enter-button::after {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+
+    width: 36px;
+    height: 1px;
+
+    background: #62574f;
+
+    transform:
+        translateX(-50%);
+
+    transition:
+        width 0.5s ease;
+}
+
+.enter-button::before {
+    top: 1px;
+}
+
+.enter-button::after {
+    bottom: 1px;
+}
+
+.enter-button:hover {
+    color: #f0e7dc;
+
+    letter-spacing: 6px;
+}
+
+.enter-button:hover::before,
+.enter-button:hover::after {
+    width: 82px;
+}
+
+
+/* =========================================================
+   PASSWORD
+========================================================= */
+
+.eyebrow {
+    margin-bottom: 21px;
+
+    color: #736a61;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 9px;
+
+    letter-spacing: 5px;
+
+    text-transform: uppercase;
+}
+
+.password-content h2 {
+    margin-bottom: 15px;
+
+    color: #e5dbd0;
+
+    font-size: 60px;
+
+    font-weight: normal;
+
+    letter-spacing: 4px;
+}
+
+.password-description {
+    margin-bottom: 40px;
+
+    color: #91867c;
+
+    font-size: 15px;
+
+    font-style: italic;
+}
+
+#passwordInput {
+    width: 270px;
+
+    margin-bottom: 26px;
+
+    padding:
+        13px 4px;
+
+    background: transparent;
+
+    border: none;
+
+    border-bottom:
+        1px solid #514841;
+
+    outline: none;
+
+    color: #eee4da;
+
+    font-family: Georgia, serif;
+
+    font-size: 16px;
+
+    text-align: center;
+}
+
+#passwordInput:focus {
+    border-bottom-color: #907c6b;
+}
+
+#passwordInput::placeholder {
+    color: #5a524b;
+}
+
+.password-button {
+    padding:
+        10px 24px;
+
+    background: transparent;
+
+    border: none;
+
+    color: #bdb3a9;
+
+    font-family: Georgia, serif;
+
+    font-size: 12px;
+
+    letter-spacing: 3px;
+
+    cursor: pointer;
+}
+
+.password-button:hover {
+    color: #eee6dc;
+}
+
+.password-error {
+    display: none;
+
+    margin-top: 20px;
+
+    color: #935959;
+
+    font-size: 12px;
+}
+
+.password-wrong {
+    animation:
+        passwordShake
+        0.45s
+        ease;
+}
+
+
+/* =========================================================
+   ARCHIVE
+========================================================= */
+
+.archive {
+    position: relative;
+
+    z-index: 40;
+
+    width: min(980px, 100%);
+
+    min-height: 100vh;
+
+    margin: 0 auto;
+
+    padding:
+        110px 30px 150px;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+}
+
+.archive.visible {
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+    animation:
+        archiveAppear
+        1.6s
+        ease both;
+}
+
+.archive-header {
+    margin-bottom: 95px;
+
+    text-align: center;
+}
+
+.archive-header h2 {
+    margin-bottom: 15px;
+
+    color: #e6ddd2;
+
+    font-size:
+        clamp(52px, 7vw, 78px);
+
+    font-weight: normal;
+
+    letter-spacing: 5px;
+}
+
+.archive-intro {
+    color: #938980;
+
+    font-size: 15px;
+
+    font-style: italic;
+}
+
+
+/* =========================================================
+   LETTER CARDS
+========================================================= */
+
+.letter-card {
+    padding:
+        70px 15px 85px;
+
+    border-top:
+        1px solid
+        rgba(100,83,70,0.23);
+
+    text-align: center;
+}
+
+.letter-card:last-child {
+    border-bottom:
+        1px solid
+        rgba(100,83,70,0.23);
+}
+
+.letter-date {
+    margin-bottom: 19px;
+
+    color: #746b62;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 9px;
+
+    letter-spacing: 4px;
+}
+
+.letter-card h3 {
+    margin-bottom: 30px;
+
+    color: #ddd4ca;
+
+    font-size: 25px;
+
+    font-weight: normal;
+}
+
+
+/* =========================================================
+   ENVELOPE CARDS
+========================================================= */
+
+.envelope-card {
+    width:
+        min(630px, 92vw);
+
+    aspect-ratio:
+        1.45 / 1;
+
+    margin:
+        0 auto 30px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.7s ease;
+}
+
+.envelope-card img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    filter:
+        drop-shadow(
+            0 28px 24px
+            rgba(0,0,0,0.68)
+        );
+}
+
+.envelope-card:hover {
+    transform:
+        translateY(-8px)
+        scale(1.015);
+}
+
+
+/* =========================================================
+   OPEN LETTER BUTTON
+========================================================= */
+
+.open-letter-button {
+    padding: 0;
+
+    background: none;
+
+    border: none;
+
+    color: #aaa097;
+
+    font-family: Georgia, serif;
+
+    font-size: 12px;
+
+    letter-spacing: 3px;
+
+    cursor: pointer;
+}
+
+.open-letter-button:hover {
+    color: #e3d9cf;
+}
+
+
+/* =========================================================
+   LETTER OVERLAY
+========================================================= */
+
+.letter-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.55s ease,
+        visibility 0.55s ease;
+}
+
+.letter-overlay.visible {
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   BACKDROP
+========================================================= */
+
+.letter-overlay-backdrop {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(48,34,27,0.78),
+            rgba(0,0,0,0.98)
+        );
+
+    backdrop-filter:
+        blur(10px);
+}
+
+
+/* =========================================================
+   ENVELOPE SCENE
+========================================================= */
+
+.envelope-scene {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: min(640px, 86vw);
+
+    aspect-ratio: 1536 / 1024;
+
+    transform:
+        translate(-50%, -50%);
+
+    z-index: 20;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.8s ease,
+        transform 0.9s
+        cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        );
+}
+
+
+/* =========================================================
+   CLOSED ENVELOPE
+========================================================= */
+
+.overlay-envelope {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    pointer-events: none;
+}
+
+.overlay-envelope.closed {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+        translateY(0)
+        scale(1);
+
+    z-index: 21;
+
+    filter:
+        drop-shadow(
+            0 30px 35px
+            rgba(0,0,0,0.85)
+        );
+
+    transition:
+        opacity 0.65s ease,
+        transform 0.75s
+        cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        );
+}
+
+
+/* =========================================================
+   OPEN ENVELOPE
+========================================================= */
+
+.overlay-envelope.open {
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform:
+        translateY(25px)
+        scale(0.94);
+
+    z-index: 22;
+
+    filter:
+        drop-shadow(
+            0 32px 38px
+            rgba(0,0,0,0.85)
+        );
+
+    transition:
+        opacity 0.7s ease,
+        visibility 0s linear 0.7s,
+        transform 0.85s
+        cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        );
+}
+
+
+/*
+    BURADA ASIL DEĞİŞİM YAPILIYOR.
+*/
+
+.letter-overlay.envelope-swapped
+.overlay-envelope.closed {
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform:
+        translateY(-20px)
+        scale(0.93);
+
+    transition:
+        opacity 0.55s ease,
+        visibility 0s linear 0.55s,
+        transform 0.65s ease;
+}
+
+
+.letter-overlay.envelope-swapped
+.overlay-envelope.open {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+        translateY(0)
+        scale(1);
+
+    transition:
+        opacity 0.7s ease,
+        visibility 0s,
+        transform 0.85s
+        cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        );
+}
+
+
+/* =========================================================
+   BROKEN SEAL
+========================================================= */
+
+.overlay-seal {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 90px;
+    height: 90px;
+
+    transform:
+        translate(-50%, -50%)
+        scale(0.5);
+
+    opacity: 0;
+
+    z-index: 30;
+
+    object-fit: contain;
+
+    filter:
+        drop-shadow(
+            0 8px 12px
+            rgba(0,0,0,0.75)
+        );
+
+    transition:
+        opacity 0.45s ease,
+        transform 0.6s ease;
+}
+
+.letter-overlay.seal-visible
+.overlay-seal {
+
+    opacity: 1;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1);
+}
+
+
+/* =========================================================
+   LETTER PAPER
+========================================================= */
+
+.letter-paper {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width:
+        min(530px, 86vw);
+
+    height:
+        min(80vh, 760px);
+
+    max-height:
+        calc(100vh - 45px);
+
+    transform:
+        translate(-50%, -42%)
+        scale(0.9);
+
+    padding:
+        75px 66px;
+
+    overflow-y: auto;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    z-index: 40;
+
+    transition:
+        opacity 0.9s ease,
+        visibility 0s linear 0.9s,
+        transform 1s
+        cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        );
+}
+
+
+/*
+   KÂĞIT GELDİĞİNDE:
+
+   Açılmış zarf arkada kalır.
+*/
+
+.letter-overlay.paper-visible
+.letter-paper {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1);
+
+    transition:
+        opacity 0.9s ease,
+        visibility 0s,
+        transform 1s
+        cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        );
+}
+
+
+/* =========================================================
+   LETTER PAPER BACKGROUND
+========================================================= */
+
+.letter-paper-background {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: fill;
+
+    z-index: -1;
+
+    pointer-events: none;
+
+    filter:
+        drop-shadow(
+            0 30px 40px
+            rgba(0,0,0,0.8)
+        );
+}
+
+
+/* =========================================================
+   LETTER TEXT
+========================================================= */
+
+.letter-content {
+    position: relative;
+
+    z-index: 2;
+
+    max-width: 390px;
+
+    margin: 0 auto;
+
+    padding-bottom: 40px;
+
+    color: #3b2b20;
+}
+
+.letter-open-date {
+    margin-bottom: 22px;
+
+    color: #705646;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 10px;
+
+    letter-spacing: 3px;
+}
+
+.letter-open-title {
+    margin-bottom: 22px;
+
+    color: #342318;
+
+    font-size:
+        clamp(24px,4vw,32px);
+
+    font-weight: normal;
+
+    line-height: 1.3;
+}
+
+.letter-open-line {
+    width: 60px;
+    height: 1px;
+
+    margin-bottom: 28px;
+
+    background: #76543e;
+}
+
+.letter-open-text {
+    color: #463327;
+
+    font-size: 16px;
+
+    line-height: 1.9;
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.letter-close-button {
+    position: absolute;
+
+    top: 25px;
+    right: 30px;
+
+    z-index: 100;
+
+    width: 43px;
+    height: 43px;
+
+    background:
+        rgba(15,12,10,0.45);
+
+    border:
+        1px solid
+        rgba(220,210,195,0.28);
+
+    color: #d8cec3;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 28px;
+
+    cursor: pointer;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.4s ease,
+        transform 0.4s ease;
+}
+
+.letter-overlay.visible
+.letter-close-button {
+
+    opacity: 1;
+
+    pointer-events: auto;
+}
+
+.letter-close-button:hover {
+    transform:
+        rotate(90deg);
+}
+
+body.letter-open {
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   KEYFRAMES
+========================================================= */
+
+@keyframes atmosphereBreath {
+
+    0%,
+    100% {
+        opacity: 0.7;
+
+        transform:
+            translate(-50%, -50%)
+            scale(0.96);
+    }
+
+    50% {
+        opacity: 1;
+
+        transform:
+            translate(-50%, -50%)
+            scale(1.05);
+    }
+}
+
+@keyframes fogLeft {
+
+    0%,
+    100% {
+        transform:
+            translateX(-4%);
+    }
+
+    50% {
+        transform:
+            translateX(5%);
+    }
+}
+
+@keyframes fogRight {
+
+    0%,
+    100% {
+        transform:
+            translateX(4%);
+    }
+
+    50% {
+        transform:
+            translateX(-5%);
+    }
+}
+
+@keyframes vineLeft {
+
+    0%,
+    100% {
+        transform:
+            rotate(-1.2deg)
+            translateX(0);
+    }
+
+    50% {
+        transform:
+            rotate(1deg)
+            translateX(6px);
+    }
+}
+
+@keyframes vineRight {
+
+    0%,
+    100% {
+        transform:
+            scaleX(-1)
+            rotate(-1.2deg)
+            translateX(0);
+    }
+
+    50% {
+        transform:
+            scaleX(-1)
+            rotate(1deg)
+            translateX(-6px);
+    }
+}
+
+@keyframes bloomSway {
+
+    0%,
+    100% {
+        transform:
+            rotate(-1deg);
+    }
+
+    50% {
+        transform:
+            rotate(1deg);
+    }
+}
+
+@keyframes passwordShake {
+
+    0%,
+    100% {
+        transform:
+            translateX(0);
+    }
+
+    25% {
+        transform:
+            translateX(-8px);
+    }
+
+    50% {
+        transform:
+            translateX(8px);
+    }
+
+    75% {
+        transform:
+            translateX(-5px);
+    }
+}
+
+@keyframes archiveAppear {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(35px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .vine {
+        width: 225px;
+
+        height: 108%;
+    }
+
+    .vine-left {
+        left: -92px;
+    }
+
+    .vine-right {
+        right: -92px;
+    }
+
+
+    .bloom-1 {
+        left: 102px;
+        top: 12%;
+
+        width: 62px;
+        height: 80px;
+    }
+
+    .bloom-2 {
+        right: 102px;
+        top: 16%;
+
+        width: 60px;
+        height: 78px;
+    }
+
+    .bloom-3 {
+        left: 82px;
+        top: 42%;
+
+        width: 60px;
+        height: 78px;
+    }
+
+    .bloom-4 {
+        right: 84px;
+        top: 47%;
+
+        width: 62px;
+        height: 79px;
+    }
+
+    .bloom-5 {
+        left: 106px;
+        bottom: 9%;
+
+        width: 60px;
+        height: 77px;
+    }
+
+    .bloom-6 {
+        right: 106px;
+        bottom: 8%;
+
+        width: 59px;
+        height: 76px;
+    }
+
+
+    h1 {
+        font-size: 56px;
+    }
+
+    .subtitle {
+        max-width: 290px;
+
+        font-size: 13px;
+    }
+
+    .password-content h2 {
+        font-size: 46px;
+    }
+
+    #passwordInput {
+        width: 230px;
+    }
+
+
+    .archive {
+        padding:
+            75px 15px 100px;
+    }
+
+    .archive-header {
+        margin-bottom: 65px;
+    }
+
+    .archive-header h2 {
+        font-size: 48px;
+    }
+
+    .letter-card {
+        padding:
+            50px 0 60px;
+    }
+
+    .letter-card h3 {
+        font-size: 21px;
+    }
+
+    .envelope-card {
+        width: 97vw;
+    }
+
+    .letter-paper {
+        width: 88vw;
+
+        height: 80vh;
+
+        padding:
+            55px 40px;
+    }
+
+    .letter-open-title {
+        font-size: 24px;
+    }
+
+    .letter-open-text {
+        font-size: 15px;
+
+        line-height: 1.85;
+    }
+
+    .letter-close-button {
+        top: 15px;
+        right: 15px;
+
+        width: 38px;
+        height: 38px;
+
+        font-size: 25px;
+    }
+
+    .overlay-seal {
+        width: 65px;
+        height: 65px;
+    }
+
+}

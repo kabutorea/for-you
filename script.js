@@ -1,369 +1,1183 @@
+/* =========================================================
+   SUPABASE
+========================================================= */
+
 const SUPABASE_URL = "https://qjkeammjnzcosuyynxxr.supabase.co";
 const SUPABASE_KEY = "sb_publishable_B-XLgbqAYzRNBdn1gQriZA_REnnRP3D";
 
 const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
+    SUPABASE_URL,
+    SUPABASE_KEY
 );
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
 
 const READ_LETTERS_KEY = "forYouReadLetters";
 
 let archivePassword = "";
 
-const homeScreen = document.getElementById("homeScreen");
-const passwordScreen = document.getElementById("passwordScreen");
-const archiveScreen = document.getElementById("archiveScreen");
 
-const enterButton = document.getElementById("enterButton");
-const passwordInput = document.getElementById("passwordInput");
-const passwordButton = document.getElementById("passwordButton");
-const passwordError = document.getElementById("passwordError");
+/* =========================================================
+   MAIN SCREENS
+========================================================= */
 
-const roseScene = document.getElementById("roseScene");
+const homeScreen =
+    document.getElementById("homeScreen");
 
-const lettersContainer = document.getElementById("lettersContainer");
+const passwordScreen =
+    document.getElementById("passwordScreen");
 
-const letterOverlay = document.getElementById("letterOverlay");
-const overlayBackdrop = letterOverlay?.querySelector(".letter-overlay-backdrop");
+const archiveScreen =
+    document.getElementById("archiveScreen");
 
-const overlayClosedEnvelope = letterOverlay?.querySelector(
-  ".overlay-envelope.closed"
-);
 
-const overlayOpenEnvelope = letterOverlay?.querySelector(
-  ".overlay-envelope.open"
-);
+/* =========================================================
+   HOME / PASSWORD
+========================================================= */
 
-const overlaySeal = letterOverlay?.querySelector(".overlay-seal");
+const enterButton =
+    document.getElementById("enterButton");
 
-const letterPaper = letterOverlay?.querySelector(".letter-paper");
+const passwordInput =
+    document.getElementById("passwordInput");
 
-const letterDate = document.getElementById("letterDate");
-const letterTitle = document.getElementById("letterTitle");
-const letterText = document.getElementById("letterText");
+const passwordButton =
+    document.getElementById("passwordButton");
 
-const closeLetterButton = document.getElementById("closeLetterButton");
+const passwordError =
+    document.getElementById("passwordError");
 
-const blooms = Array.from(document.querySelectorAll(".bloom"));
+
+/* =========================================================
+   ROSES
+========================================================= */
+
+const roseScene =
+    document.getElementById("roseScene");
+
+const blooms =
+    Array.from(
+        document.querySelectorAll(".bloom")
+    );
+
+
+/* =========================================================
+   ARCHIVE
+========================================================= */
+
+const lettersContainer =
+    document.getElementById("lettersContainer");
+
+
+/* =========================================================
+   LETTER OVERLAY
+========================================================= */
+
+const letterOverlay =
+    document.getElementById("letterOverlay");
+
+const letterBackdrop =
+    document.getElementById(
+        "letterOverlayBackdrop"
+    );
+
+const envelopeScene =
+    document.getElementById(
+        "envelopeScene"
+    );
+
+const closedEnvelopeImage =
+    document.getElementById(
+        "closedEnvelopeImage"
+    );
+
+const openEnvelopeImage =
+    document.getElementById(
+        "openEnvelopeImage"
+    );
+
+const brokenSeal =
+    document.getElementById(
+        "brokenSeal"
+    );
+
+const letterPaper =
+    document.getElementById(
+        "letterPaper"
+    );
+
+const letterCloseButton =
+    document.getElementById(
+        "letterCloseButton"
+    );
+
+const letterOpenDate =
+    document.getElementById(
+        "letterOpenDate"
+    );
+
+const letterOpenTitle =
+    document.getElementById(
+        "letterOpenTitle"
+    );
+
+const letterOpenText =
+    document.getElementById(
+        "letterOpenText"
+    );
+
+
+/* =========================================================
+   BASIC CHECK
+========================================================= */
+
+if (
+    !homeScreen ||
+    !passwordScreen ||
+    !archiveScreen ||
+    !enterButton ||
+    !passwordInput ||
+    !passwordButton ||
+    !passwordError ||
+    !roseScene ||
+    !lettersContainer ||
+    !letterOverlay ||
+    !letterBackdrop ||
+    !closedEnvelopeImage ||
+    !openEnvelopeImage ||
+    !brokenSeal ||
+    !letterPaper ||
+    !letterCloseButton ||
+    !letterOpenDate ||
+    !letterOpenTitle ||
+    !letterOpenText
+) {
+    console.error(
+        "for you. — some required HTML elements are missing."
+    );
+}
+
+
+/* =========================================================
+   WAIT
+========================================================= */
+
+function wait(ms) {
+    return new Promise(
+        (resolve) => {
+            setTimeout(
+                resolve,
+                ms
+            );
+        }
+    );
+}
+
+
+/* =========================================================
+   READ LETTERS
+========================================================= */
 
 function getReadLetters() {
-  try {
-    return JSON.parse(localStorage.getItem(READ_LETTERS_KEY)) || [];
-  } catch {
-    return [];
-  }
+    try {
+        const saved =
+            localStorage.getItem(
+                READ_LETTERS_KEY
+            );
+
+        if (!saved) {
+            return [];
+        }
+
+        const parsed =
+            JSON.parse(saved);
+
+        if (
+            !Array.isArray(parsed)
+        ) {
+            return [];
+        }
+
+        return parsed;
+
+    } catch (error) {
+        console.error(
+            "Could not read saved letters:",
+            error
+        );
+
+        return [];
+    }
 }
 
-function saveReadLetters(readLetters) {
-  localStorage.setItem(
-    READ_LETTERS_KEY,
-    JSON.stringify(readLetters)
-  );
+
+function saveReadLetters(
+    readLetters
+) {
+    localStorage.setItem(
+        READ_LETTERS_KEY,
+        JSON.stringify(
+            readLetters
+        )
+    );
 }
+
 
 function getLetterKey(letter) {
-  return String(letter.id);
+    return String(
+        letter.id
+    );
 }
+
 
 function isLetterRead(letter) {
-  return getReadLetters().includes(getLetterKey(letter));
+    const readLetters =
+        getReadLetters();
+
+    return readLetters.includes(
+        getLetterKey(letter)
+    );
 }
+
 
 function markLetterAsRead(letter) {
-  const readLetters = getReadLetters();
-  const key = getLetterKey(letter);
+    const readLetters =
+        getReadLetters();
 
-  if (!readLetters.includes(key)) {
-    readLetters.push(key);
-    saveReadLetters(readLetters);
-  }
+    const key =
+        getLetterKey(letter);
+
+    if (
+        !readLetters.includes(key)
+    ) {
+        readLetters.push(key);
+
+        saveReadLetters(
+            readLetters
+        );
+    }
 }
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
 
 function escapeHTML(value) {
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 }
+
+
+/* =========================================================
+   GET LETTERS
+   EDGE FUNCTION ÜZERİNDEN
+========================================================= */
 
 async function getLetters() {
-  if (!archivePassword) {
-    throw new Error("Archive password is missing.");
-  }
 
-  const { data, error } = await supabaseClient.functions.invoke(
-    "check-archive-password",
-    {
-      body: {
-        password: archivePassword,
-      },
+    if (!archivePassword) {
+        throw new Error(
+            "Archive password is missing."
+        );
     }
-  );
 
-  if (error) {
-    throw error;
-  }
+    const result =
+        await supabaseClient.functions.invoke(
+            "check-archive-password",
+            {
+                body: {
+                    password:
+                        archivePassword
+                }
+            }
+        );
 
-  if (!data?.success) {
-    throw new Error("Archive access denied.");
-  }
+    const data =
+        result.data;
 
-  return data.letters ?? [];
+    const error =
+        result.error;
+
+    if (error) {
+        throw error;
+    }
+
+    if (
+        !data ||
+        data.success !== true
+    ) {
+        throw new Error(
+            "Archive access denied."
+        );
+    }
+
+    if (
+        !Array.isArray(
+            data.letters
+        )
+    ) {
+        return [];
+    }
+
+    return data.letters;
 }
 
-function renderLetters(letters) {
-  lettersContainer.innerHTML = "";
 
-  if (!letters.length) {
-    lettersContainer.innerHTML = `
-      <div class="letter-card empty-state">
-        <p>there is nothing here yet.</p>
-      </div>
-    `;
+/* =========================================================
+   RENDER LETTERS
+========================================================= */
 
-    return;
-  }
+function renderLetters(
+    letters
+) {
 
-  letters.forEach((letter) => {
-    const read = isLetterRead(letter);
+    lettersContainer.innerHTML = "";
 
-    const card = document.createElement("article");
-    card.className = "letter-card";
+    if (
+        !letters ||
+        letters.length === 0
+    ) {
 
-    card.innerHTML = `
-      <div class="letter-date">
-        ${escapeHTML(letter.date)}
-      </div>
+        lettersContainer.innerHTML = `
+            <div class="letter-card empty-state">
+                <p>there is nothing here yet.</p>
+            </div>
+        `;
 
-      <h3>
-        ${escapeHTML(letter.title)}
-      </h3>
+        return;
+    }
 
-      <div class="envelope-card ${read ? "is-read" : "is-unread"}">
-        <img
-          src="${
-            read
-              ? "envelope-open-cutout.png"
-              : "envelope-vintage-cutout.png"
-          }"
-          alt="letter envelope"
-        >
 
-        <button
-          type="button"
-          class="open-letter-button"
-          aria-label="Open letter"
-        ></button>
-      </div>
-    `;
+    letters.forEach(
+        (letter) => {
 
-    const envelopeButton = card.querySelector(".open-letter-button");
+            const card =
+                document.createElement(
+                    "article"
+                );
 
-    envelopeButton.addEventListener("click", () => {
-      openLetter(letter);
-    });
+            card.className =
+                "letter-card";
 
-    lettersContainer.appendChild(card);
-  });
+
+            const read =
+                isLetterRead(letter);
+
+
+            const envelopeImage =
+                read
+                    ? "envelope-open-cutout.png"
+                    : "envelope-vintage-cutout.png";
+
+
+            card.innerHTML = `
+                <div class="letter-date">
+                    ${escapeHTML(
+                        letter.date
+                    )}
+                </div>
+
+                <h3>
+                    ${escapeHTML(
+                        letter.title
+                    )}
+                </h3>
+
+                <div
+                    class="envelope-card ${
+                        read
+                            ? "is-read"
+                            : "is-unread"
+                    }"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Open letter"
+                >
+                    <img
+                        src="${envelopeImage}"
+                        alt="Vintage envelope"
+                    >
+                </div>
+
+                <button
+                    type="button"
+                    class="open-letter-button"
+                >
+                    open letter
+                </button>
+            `;
+
+
+            const envelope =
+                card.querySelector(
+                    ".envelope-card"
+                );
+
+            const openButton =
+                card.querySelector(
+                    ".open-letter-button"
+                );
+
+
+            /*
+                ZARFA TIKLAMA
+            */
+
+            envelope.addEventListener(
+                "click",
+                () => {
+                    openLetter(
+                        letter
+                    );
+                }
+            );
+
+
+            /*
+                ENTER / SPACE
+            */
+
+            envelope.addEventListener(
+                "keydown",
+                (event) => {
+
+                    if (
+                        event.key === "Enter" ||
+                        event.key === " "
+                    ) {
+
+                        event.preventDefault();
+
+                        openLetter(
+                            letter
+                        );
+                    }
+
+                }
+            );
+
+
+            /*
+                OPEN LETTER BUTONU
+            */
+
+            openButton.addEventListener(
+                "click",
+                () => {
+                    openLetter(
+                        letter
+                    );
+                }
+            );
+
+
+            lettersContainer.appendChild(
+                card
+            );
+
+        }
+    );
 }
+
+
+/* =========================================================
+   LOAD ARCHIVE
+========================================================= */
 
 async function loadArchive() {
-  lettersContainer.innerHTML = `
-    <div class="loading">
-      opening the archive...
-    </div>
-  `;
-
-  try {
-    const letters = await getLetters();
-    renderLetters(letters);
-  } catch (error) {
-    console.error("Could not load archive:", error);
 
     lettersContainer.innerHTML = `
-      <div class="letter-card empty-state">
-        <p>the archive could not be opened.</p>
-      </div>
+        <div class="loading">
+            opening the archive...
+        </div>
     `;
-  }
+
+
+    try {
+
+        const letters =
+            await getLetters();
+
+        renderLetters(
+            letters
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Could not load archive:",
+            error
+        );
+
+        lettersContainer.innerHTML = `
+            <div class="letter-card empty-state">
+                <p>
+                    the archive could not be opened.
+                </p>
+            </div>
+        `;
+    }
 }
 
-function showArchive() {
-  archiveScreen.classList.add("visible");
-  loadArchive();
+
+/* =========================================================
+   ROSE ANIMATION
+========================================================= */
+
+function animateBloom(
+    bloom,
+    delay
+) {
+
+    setTimeout(
+        () => {
+
+            bloom.classList.add(
+                "is-swelling"
+            );
+
+
+            setTimeout(
+                () => {
+
+                    bloom.classList.remove(
+                        "is-swelling"
+                    );
+
+                    bloom.classList.add(
+                        "is-opening"
+                    );
+
+
+                    setTimeout(
+                        () => {
+
+                            bloom.classList.remove(
+                                "is-opening"
+                            );
+
+                            bloom.classList.add(
+                                "is-open"
+                            );
+
+                        },
+                        1000
+                    );
+
+                },
+                1000
+            );
+
+        },
+        delay
+    );
 }
 
-function animateBloom(bloom, delay) {
-  setTimeout(() => {
-    bloom.classList.add("is-swelling");
-
-    setTimeout(() => {
-      bloom.classList.remove("is-swelling");
-      bloom.classList.add("is-opening");
-
-      setTimeout(() => {
-        bloom.classList.remove("is-opening");
-        bloom.classList.add("is-open");
-      }, 1000);
-    }, 1000);
-  }, delay);
-}
 
 function bloomAll() {
-  roseScene.classList.add("active");
 
-  blooms.forEach((bloom, index) => {
-    animateBloom(bloom, index * 350);
-  });
+    roseScene.classList.add(
+        "active"
+    );
 
-  setTimeout(() => {
-    showArchive();
-  }, 4000);
+
+    blooms.forEach(
+        (bloom, index) => {
+
+            animateBloom(
+                bloom,
+                index * 350
+            );
+
+        }
+    );
+
+
+    setTimeout(
+        () => {
+            showArchive();
+        },
+        4000
+    );
 }
 
-function checkPassword() {
-  const password = passwordInput.value;
 
-  if (!password) {
-    passwordError.textContent = "enter the password.";
-    passwordError.classList.add("visible");
-    return;
-  }
+/* =========================================================
+   SHOW ARCHIVE
+========================================================= */
 
-  passwordButton.disabled = true;
-  passwordError.classList.remove("visible");
+function showArchive() {
 
-  supabaseClient.functions
-    .invoke("check-archive-password", {
-      body: {
-        password,
-      },
-    })
-    .then(({ data, error }) => {
-      if (error || !data?.success) {
-        passwordError.textContent = "that isn't the right password.";
-        passwordError.classList.add("visible");
+    archiveScreen.classList.add(
+        "visible"
+    );
 
-        passwordInput.classList.remove("password-wrong");
+    window.scrollTo(
+        0,
+        0
+    );
+
+    loadArchive();
+}
+
+
+/* =========================================================
+   PASSWORD
+========================================================= */
+
+async function checkPassword() {
+
+    const password =
+        passwordInput.value.trim();
+
+
+    if (!password) {
+
+        passwordError.textContent =
+            "enter the password.";
+
+        passwordError.classList.add(
+            "visible"
+        );
+
+        return;
+    }
+
+
+    passwordButton.disabled = true;
+
+
+    passwordError.classList.remove(
+        "visible"
+    );
+
+
+    try {
+
+        const result =
+            await supabaseClient.functions.invoke(
+                "check-archive-password",
+                {
+                    body: {
+                        password:
+                            password
+                    }
+                }
+            );
+
+
+        const data =
+            result.data;
+
+        const error =
+            result.error;
+
+
+        if (
+            error ||
+            !data ||
+            data.success !== true
+        ) {
+            throw new Error(
+                "Invalid password."
+            );
+        }
+
+
+        /*
+            Şifreyi kod içine koymuyoruz.
+            Sadece başarılı girişten sonra
+            RAM'de tutuyoruz.
+        */
+
+        archivePassword =
+            password;
+
+
+        passwordInput.value =
+            "";
+
+
+        passwordError.classList.remove(
+            "visible"
+        );
+
+
+        passwordInput.blur();
+
+
+        passwordScreen.classList.remove(
+            "active"
+        );
+
+
+        bloomAll();
+
+
+    } catch (error) {
+
+        console.error(
+            "Password verification failed:",
+            error
+        );
+
+
+        passwordError.textContent =
+            "that isn't the right password.";
+
+
+        passwordError.classList.add(
+            "visible"
+        );
+
+
+        passwordInput.classList.remove(
+            "password-wrong"
+        );
+
 
         void passwordInput.offsetWidth;
 
-        passwordInput.classList.add("password-wrong");
 
-        passwordInput.value = "";
-        passwordButton.disabled = false;
+        passwordInput.classList.add(
+            "password-wrong"
+        );
 
-        setTimeout(() => {
-          passwordInput.classList.remove("password-wrong");
-        }, 500);
 
-        return;
-      }
+        passwordInput.value =
+            "";
 
-      archivePassword = password;
 
-      passwordError.classList.remove("visible");
-      passwordInput.blur();
+        passwordButton.disabled =
+            false;
 
-      passwordScreen.classList.remove("active");
 
-      bloomAll();
-    })
-    .catch((error) => {
-      console.error("Password verification failed:", error);
+        setTimeout(
+            () => {
 
-      passwordError.textContent =
-        "something went wrong. try again.";
+                passwordInput.classList.remove(
+                    "password-wrong"
+                );
 
-      passwordError.classList.add("visible");
+            },
+            500
+        );
 
-      passwordButton.disabled = false;
-    });
+    }
 }
+
+
+/* =========================================================
+   LETTER OVERLAY — RESET
+========================================================= */
 
 function resetLetterOverlay() {
-  letterOverlay.classList.remove(
-    "visible",
-    "envelope-swapped",
-    "seal-visible",
-    "paper-visible"
-  );
 
-  document.body.classList.remove("letter-open");
+    letterOverlay.classList.remove(
+        "visible",
+        "seal-visible",
+        "envelope-swapped",
+        "paper-visible"
+    );
 
-  letterDate.textContent = "";
-  letterTitle.textContent = "";
-  letterText.textContent = "";
+
+    letterOverlay.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    document.body.classList.remove(
+        "letter-open"
+    );
+
+
+    /*
+        ÖNEMLİ:
+        Burada inline opacity / visibility /
+        transform KULLANMIYORUZ.
+
+        Animasyon tamamen CSS class'ları
+        üzerinden çalışıyor.
+    */
+
+
+    letterOpenDate.textContent =
+        "";
+
+    letterOpenTitle.textContent =
+        "";
+
+    letterOpenText.textContent =
+        "";
 }
 
-function openLetter(letter) {
-  letterDate.textContent = letter.date;
-  letterTitle.textContent = letter.title;
-  letterText.textContent = letter.content;
 
-  letterOverlay.classList.add("visible");
-  document.body.classList.add("letter-open");
+/* =========================================================
+   OPEN LETTER
+========================================================= */
 
-  setTimeout(() => {
-    letterOverlay.classList.add("seal-visible");
-  }, 300);
+async function openLetter(
+    letter
+) {
 
-  setTimeout(() => {
-    letterOverlay.classList.add("envelope-swapped");
-  }, 900);
+    if (!letter) {
+        return;
+    }
 
-  setTimeout(() => {
-    letterOverlay.classList.add("paper-visible");
-  }, 1700);
 
-  markLetterAsRead(letter);
-}
+    /*
+        Her açılışın temiz başlaması
+        gerekiyor.
+    */
 
-function closeLetter() {
-  letterOverlay.classList.remove("paper-visible");
-
-  setTimeout(() => {
     resetLetterOverlay();
-    loadArchive();
-  }, 700);
+
+
+    /*
+        Mektup bilgileri
+    */
+
+    letterOpenDate.textContent =
+        letter.date ?? "";
+
+    letterOpenTitle.textContent =
+        letter.title ?? "";
+
+    letterOpenText.textContent =
+        letter.content ?? "";
+
+
+    /*
+        Okundu olarak işaretle
+    */
+
+    markLetterAsRead(
+        letter
+    );
+
+
+    /*
+        OVERLAY AÇILIR
+    */
+
+    letterOverlay.classList.add(
+        "visible"
+    );
+
+
+    letterOverlay.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.classList.add(
+        "letter-open"
+    );
+
+
+    /*
+        1.
+        MÜHÜR GELİR
+    */
+
+    await wait(350);
+
+
+    letterOverlay.classList.add(
+        "seal-visible"
+    );
+
+
+    /*
+        2.
+        KAPALI ZARF → AÇIK ZARF
+    */
+
+    await wait(600);
+
+
+    letterOverlay.classList.add(
+        "envelope-swapped"
+    );
+
+
+    /*
+        3.
+        KAĞIT ÇIKAR
+    */
+
+    await wait(1800);
+
+
+    letterOverlay.classList.add(
+        "paper-visible"
+    );
 }
 
-enterButton.addEventListener("click", () => {
-  homeScreen.classList.remove("active");
-  passwordScreen.classList.add("active");
 
-  setTimeout(() => {
-    passwordInput.focus();
-  }, 300);
-});
+/* =========================================================
+   CLOSE LETTER
+========================================================= */
 
-passwordButton.addEventListener("click", checkPassword);
+async function closeLetter() {
 
-passwordInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    checkPassword();
-  }
-});
+    if (
+        !letterOverlay.classList.contains(
+            "visible"
+        )
+    ) {
+        return;
+    }
 
-closeLetterButton?.addEventListener("click", closeLetter);
 
-overlayBackdrop?.addEventListener("click", closeLetter);
+    /*
+        Önce kağıdı kapat.
+    */
 
-document.addEventListener("keydown", (event) => {
-  if (
-    event.key === "Escape" &&
-    letterOverlay.classList.contains("visible")
-  ) {
-    closeLetter();
-  }
-});
+    letterOverlay.classList.remove(
+        "paper-visible"
+    );
+
+
+    await wait(700);
+
+
+    /*
+        Sonra açık zarfı kapat.
+    */
+
+    letterOverlay.classList.remove(
+        "envelope-swapped"
+    );
+
+
+    await wait(500);
+
+
+    /*
+        Sonra mühürü kapat.
+    */
+
+    letterOverlay.classList.remove(
+        "seal-visible"
+    );
+
+
+    await wait(250);
+
+
+    /*
+        Overlay kapanır.
+    */
+
+    letterOverlay.classList.remove(
+        "visible"
+    );
+
+
+    letterOverlay.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    document.body.classList.remove(
+        "letter-open"
+    );
+
+
+    /*
+        Bir sonraki açılış için
+        temiz duruma dön.
+    */
+
+    resetLetterOverlay();
+
+
+    /*
+        Okundu zarfı arşivde
+        güncellensin.
+    */
+
+    loadArchive();
+}
+
+
+/* =========================================================
+   ENTER
+========================================================= */
+
+enterButton.addEventListener(
+    "click",
+    () => {
+
+        homeScreen.classList.remove(
+            "active"
+        );
+
+
+        passwordScreen.classList.add(
+            "active"
+        );
+
+
+        setTimeout(
+            () => {
+                passwordInput.focus();
+            },
+            300
+        );
+
+    }
+);
+
+
+/* =========================================================
+   PASSWORD BUTTON
+========================================================= */
+
+passwordButton.addEventListener(
+    "click",
+    checkPassword
+);
+
+
+/* =========================================================
+   PASSWORD ENTER
+========================================================= */
+
+passwordInput.addEventListener(
+    "keydown",
+    (event) => {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            event.preventDefault();
+
+            checkPassword();
+        }
+
+    }
+);
+
+
+/* =========================================================
+   LETTER CLOSE BUTTON
+========================================================= */
+
+letterCloseButton.addEventListener(
+    "click",
+    closeLetter
+);
+
+
+/* =========================================================
+   BACKDROP
+========================================================= */
+
+letterBackdrop.addEventListener(
+    "click",
+    closeLetter
+);
+
+
+/* =========================================================
+   ESC
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    (event) => {
+
+        if (
+            event.key === "Escape" &&
+            letterOverlay.classList.contains(
+                "visible"
+            )
+        ) {
+
+            closeLetter();
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
 
 function initialize() {
-  resetLetterOverlay();
-  passwordError.classList.remove("visible");
-  passwordButton.disabled = false;
+
+    /*
+        Ana ekran
+    */
+
+    homeScreen.classList.add(
+        "active"
+    );
+
+
+    passwordScreen.classList.remove(
+        "active"
+    );
+
+
+    archiveScreen.classList.remove(
+        "visible"
+    );
+
+
+    /*
+        Güller başlangıçta kapalı
+    */
+
+    blooms.forEach(
+        (bloom) => {
+
+            bloom.classList.remove(
+                "is-swelling",
+                "is-opening",
+                "is-open"
+            );
+
+        }
+    );
+
+
+    /*
+        Şifre
+    */
+
+    passwordInput.value =
+        "";
+
+    passwordError.classList.remove(
+        "visible"
+    );
+
+    passwordButton.disabled =
+        false;
+
+
+    /*
+        Overlay
+    */
+
+    resetLetterOverlay();
 }
+
 
 initialize();

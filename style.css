@@ -41,7 +41,6 @@ body {
 
 .atmosphere {
     position: fixed;
-
     inset: 0;
 
     z-index: 0;
@@ -480,6 +479,7 @@ body {
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     opacity: 0;
@@ -502,7 +502,8 @@ body {
 }
 
 .screen-content {
-    width: min(680px, 86vw);
+    width:
+        min(680px, 86vw);
 
     display: flex;
 
@@ -534,7 +535,9 @@ body {
 
     color: #766d64;
 
-    font-family: Arial, sans-serif;
+    font-family:
+        Arial,
+        sans-serif;
 
     font-size: 10px;
 
@@ -583,7 +586,9 @@ h1 {
 
     color: #c8beb4;
 
-    font-family: Georgia, serif;
+    font-family:
+        Georgia,
+        serif;
 
     font-size: 12px;
 
@@ -641,7 +646,9 @@ h1 {
 
     color: #736a61;
 
-    font-family: Arial, sans-serif;
+    font-family:
+        Arial,
+        sans-serif;
 
     font-size: 9px;
 
@@ -691,7 +698,9 @@ h1 {
 
     color: #eee4da;
 
-    font-family: Georgia, serif;
+    font-family:
+        Georgia,
+        serif;
 
     font-size: 16px;
 
@@ -716,7 +725,9 @@ h1 {
 
     color: #bdb3a9;
 
-    font-family: Georgia, serif;
+    font-family:
+        Georgia,
+        serif;
 
     font-size: 12px;
 
@@ -756,7 +767,8 @@ h1 {
 
     z-index: 40;
 
-    width: min(980px, 100%);
+    width:
+        min(980px, 100%);
 
     min-height: 100vh;
 
@@ -839,7 +851,9 @@ h1 {
 
     color: #746b62;
 
-    font-family: Arial, sans-serif;
+    font-family:
+        Arial,
+        sans-serif;
 
     font-size: 9px;
 
@@ -912,7 +926,9 @@ h1 {
 
     color: #aaa097;
 
-    font-family: Georgia, serif;
+    font-family:
+        Georgia,
+        serif;
 
     font-size: 12px;
 
@@ -939,8 +955,16 @@ h1 {
 
     display: flex;
 
-    align-items: center;
+    align-items: flex-start;
+
     justify-content: center;
+
+    padding:
+        45px 0 60px;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
 
     opacity: 0;
 
@@ -951,6 +975,8 @@ h1 {
     transition:
         opacity 0.55s ease,
         visibility 0.55s ease;
+
+    -webkit-overflow-scrolling: touch;
 }
 
 .letter-overlay.visible {
@@ -967,7 +993,7 @@ h1 {
 ========================================================= */
 
 .letter-overlay-backdrop {
-    position: absolute;
+    position: fixed;
 
     inset: 0;
 
@@ -995,9 +1021,11 @@ h1 {
     left: 50%;
     top: 50%;
 
-    width: min(640px, 86vw);
+    width:
+        min(640px, 86vw);
 
-    aspect-ratio: 1536 / 1024;
+    aspect-ratio:
+        1536 / 1024;
 
     transform:
         translate(-50%, -50%);
@@ -1097,11 +1125,6 @@ h1 {
         );
 }
 
-
-/*
-    BURADA ASIL DEĞİŞİM YAPILIYOR.
-*/
-
 .letter-overlay.envelope-swapped
 .overlay-envelope.closed {
 
@@ -1118,7 +1141,6 @@ h1 {
         visibility 0s linear 0.55s,
         transform 0.65s ease;
 }
-
 
 .letter-overlay.envelope-swapped
 .overlay-envelope.open {
@@ -1194,28 +1216,39 @@ h1 {
 ========================================================= */
 
 .letter-paper {
-    position: absolute;
 
-    left: 50%;
-    top: 50%;
+    position: relative;
+
+    z-index: 40;
 
     width:
         min(530px, 86vw);
 
-    height:
+    /*
+       İçerik arttıkça gerçek kâğıt büyür.
+    */
+
+    height: auto;
+
+    /*
+       Kısa mektuplarda kâğıt küçük kalmasın.
+    */
+
+    min-height:
         min(80vh, 760px);
 
-    max-height:
-        calc(100vh - 45px);
+    /*
+       Artık max-height yok.
+       Sayfa gerektiği kadar uzayabilecek.
+    */
 
-    transform:
-        translate(-50%, -42%)
-        scale(0.9);
+    margin:
+        0 auto 40px;
 
     padding:
-        75px 66px;
+        75px 66px 145px;
 
-    overflow-y: auto;
+    overflow: visible;
 
     opacity: 0;
 
@@ -1223,7 +1256,21 @@ h1 {
 
     pointer-events: none;
 
-    z-index: 40;
+    /*
+       Arka plan görsellerinin
+       kâğıttan dışarı taşmasını engeller.
+    */
+
+    background:
+        #d7bd9d;
+
+    border-radius: 2px;
+
+    isolation: isolate;
+
+    transform:
+        translateY(25px)
+        scale(0.92);
 
     transition:
         opacity 0.9s ease,
@@ -1237,13 +1284,6 @@ h1 {
         );
 }
 
-
-/*
-   KÂĞIT GELDİĞİNDE:
-
-   Açılmış zarf arkada kalır.
-*/
-
 .letter-overlay.paper-visible
 .letter-paper {
 
@@ -1254,7 +1294,7 @@ h1 {
     pointer-events: auto;
 
     transform:
-        translate(-50%, -50%)
+        translateY(0)
         scale(1);
 
     transition:
@@ -1271,10 +1311,11 @@ h1 {
 
 
 /* =========================================================
-   LETTER PAPER BACKGROUND
+   PAPER BACKGROUND
 ========================================================= */
 
 .letter-paper-background {
+
     position: absolute;
 
     inset: 0;
@@ -1282,11 +1323,14 @@ h1 {
     width: 100%;
     height: 100%;
 
-    object-fit: fill;
+    z-index: 0;
 
-    z-index: -1;
+    overflow: hidden;
 
     pointer-events: none;
+
+    background:
+        #d7bd9d;
 
     filter:
         drop-shadow(
@@ -1297,63 +1341,216 @@ h1 {
 
 
 /* =========================================================
-   LETTER TEXT
+   PAPER TOP
+========================================================= */
+
+.paper-texture-top {
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+
+    height: 120px;
+
+    z-index: 3;
+
+    background-image:
+        url("letter-paper-top.png");
+
+    background-repeat:
+        no-repeat;
+
+    background-position:
+        center top;
+
+    background-size:
+        100% 100%;
+}
+
+
+/* =========================================================
+   PAPER MIDDLE
+========================================================= */
+
+.paper-texture-middle {
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    top: 110px;
+    bottom: 110px;
+
+    z-index: 1;
+
+    background-color:
+        #d7bd9d;
+
+    background-image:
+        url("letter-paper-middle.png");
+
+    background-repeat:
+        repeat-y;
+
+    background-position:
+        center top;
+
+    background-size:
+        100% auto;
+}
+
+
+/* =========================================================
+   PAPER BOTTOM
+========================================================= */
+
+.paper-texture-bottom {
+
+    position: absolute;
+
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+
+    height: 120px;
+
+    z-index: 3;
+
+    background-image:
+        url("letter-paper-bottom.png");
+
+    background-repeat:
+        no-repeat;
+
+    background-position:
+        center bottom;
+
+    background-size:
+        100% 100%;
+}
+
+
+/* =========================================================
+   LETTER CONTENT
 ========================================================= */
 
 .letter-content {
+
     position: relative;
 
-    z-index: 2;
+    z-index: 5;
 
-    max-width: 390px;
+    max-width:
+        390px;
 
-    margin: 0 auto;
+    margin:
+        0 auto;
 
-    padding-bottom: 40px;
+    padding-bottom:
+        30px;
 
-    color: #3b2b20;
+    color:
+        #3b2b20;
 }
 
 .letter-open-date {
-    margin-bottom: 22px;
 
-    color: #705646;
+    margin-bottom:
+        22px;
 
-    font-family: Arial, sans-serif;
+    color:
+        #705646;
 
-    font-size: 10px;
+    font-family:
+        Arial,
+        sans-serif;
 
-    letter-spacing: 3px;
+    font-size:
+        10px;
+
+    letter-spacing:
+        3px;
 }
 
 .letter-open-title {
-    margin-bottom: 22px;
 
-    color: #342318;
+    margin-bottom:
+        22px;
+
+    color:
+        #342318;
 
     font-size:
-        clamp(24px,4vw,32px);
+        clamp(
+            24px,
+            4vw,
+            32px
+        );
 
-    font-weight: normal;
+    font-weight:
+        normal;
 
-    line-height: 1.3;
+    line-height:
+        1.3;
 }
 
 .letter-open-line {
-    width: 60px;
-    height: 1px;
 
-    margin-bottom: 28px;
+    width:
+        60px;
 
-    background: #76543e;
+    height:
+        1px;
+
+    margin-bottom:
+        28px;
+
+    background:
+        #76543e;
 }
 
 .letter-open-text {
-    color: #463327;
 
-    font-size: 16px;
+    color:
+        #463327;
 
-    line-height: 1.9;
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:
+        16px;
+
+    line-height:
+        1.95;
+
+    text-align:
+        left;
+
+    /*
+       Supabase'deki satır boşluklarını korur.
+    */
+
+    white-space:
+        pre-wrap;
+
+    overflow-wrap:
+        anywhere;
+
+    word-break:
+        normal;
+
+    letter-spacing:
+        0.01em;
+
+    text-rendering:
+        optimizeLegibility;
 }
 
 
@@ -1362,34 +1559,59 @@ h1 {
 ========================================================= */
 
 .letter-close-button {
-    position: absolute;
 
-    top: 25px;
-    right: 30px;
+    position: fixed;
 
-    z-index: 100;
+    top:
+        25px;
 
-    width: 43px;
-    height: 43px;
+    right:
+        30px;
+
+    z-index:
+        100;
+
+    width:
+        43px;
+
+    height:
+        43px;
 
     background:
-        rgba(15,12,10,0.45);
+        rgba(
+            15,
+            12,
+            10,
+            0.45
+        );
 
     border:
         1px solid
-        rgba(220,210,195,0.28);
+        rgba(
+            220,
+            210,
+            195,
+            0.28
+        );
 
-    color: #d8cec3;
+    color:
+        #d8cec3;
 
-    font-family: Arial, sans-serif;
+    font-family:
+        Arial,
+        sans-serif;
 
-    font-size: 28px;
+    font-size:
+        28px;
 
-    cursor: pointer;
+    cursor:
+        pointer;
 
-    opacity: 0;
+    opacity:
+        0;
 
-    pointer-events: none;
+    pointer-events:
+        none;
 
     transition:
         opacity 0.4s ease,
@@ -1399,18 +1621,23 @@ h1 {
 .letter-overlay.visible
 .letter-close-button {
 
-    opacity: 1;
+    opacity:
+        1;
 
-    pointer-events: auto;
+    pointer-events:
+        auto;
 }
 
 .letter-close-button:hover {
+
     transform:
         rotate(90deg);
 }
 
 body.letter-open {
-    overflow: hidden;
+
+    overflow:
+        hidden;
 }
 
 
@@ -1422,19 +1649,33 @@ body.letter-open {
 
     0%,
     100% {
-        opacity: 0.7;
+
+        opacity:
+            0.7;
 
         transform:
-            translate(-50%, -50%)
-            scale(0.96);
+            translate(
+                -50%,
+                -50%
+            )
+            scale(
+                0.96
+            );
     }
 
     50% {
-        opacity: 1;
+
+        opacity:
+            1;
 
         transform:
-            translate(-50%, -50%)
-            scale(1.05);
+            translate(
+                -50%,
+                -50%
+            )
+            scale(
+                1.05
+            );
     }
 }
 
@@ -1442,13 +1683,19 @@ body.letter-open {
 
     0%,
     100% {
+
         transform:
-            translateX(-4%);
+            translateX(
+                -4%
+            );
     }
 
     50% {
+
         transform:
-            translateX(5%);
+            translateX(
+                5%
+            );
     }
 }
 
@@ -1456,13 +1703,19 @@ body.letter-open {
 
     0%,
     100% {
+
         transform:
-            translateX(4%);
+            translateX(
+                4%
+            );
     }
 
     50% {
+
         transform:
-            translateX(-5%);
+            translateX(
+                -5%
+            );
     }
 }
 
@@ -1470,15 +1723,25 @@ body.letter-open {
 
     0%,
     100% {
+
         transform:
-            rotate(-1.2deg)
-            translateX(0);
+            rotate(
+                -1.2deg
+            )
+            translateX(
+                0
+            );
     }
 
     50% {
+
         transform:
-            rotate(1deg)
-            translateX(6px);
+            rotate(
+                1deg
+            )
+            translateX(
+                6px
+            );
     }
 }
 
@@ -1486,17 +1749,31 @@ body.letter-open {
 
     0%,
     100% {
+
         transform:
-            scaleX(-1)
-            rotate(-1.2deg)
-            translateX(0);
+            scaleX(
+                -1
+            )
+            rotate(
+                -1.2deg
+            )
+            translateX(
+                0
+            );
     }
 
     50% {
+
         transform:
-            scaleX(-1)
-            rotate(1deg)
-            translateX(-6px);
+            scaleX(
+                -1
+            )
+            rotate(
+                1deg
+            )
+            translateX(
+                -6px
+            );
     }
 }
 
@@ -1504,13 +1781,19 @@ body.letter-open {
 
     0%,
     100% {
+
         transform:
-            rotate(-1deg);
+            rotate(
+                -1deg
+            );
     }
 
     50% {
+
         transform:
-            rotate(1deg);
+            rotate(
+                1deg
+            );
     }
 }
 
@@ -1518,40 +1801,60 @@ body.letter-open {
 
     0%,
     100% {
+
         transform:
-            translateX(0);
+            translateX(
+                0
+            );
     }
 
     25% {
+
         transform:
-            translateX(-8px);
+            translateX(
+                -8px
+            );
     }
 
     50% {
+
         transform:
-            translateX(8px);
+            translateX(
+                8px
+            );
     }
 
     75% {
+
         transform:
-            translateX(-5px);
+            translateX(
+                -5px
+            );
     }
 }
 
 @keyframes archiveAppear {
 
     from {
-        opacity: 0;
+
+        opacity:
+            0;
 
         transform:
-            translateY(35px);
+            translateY(
+                35px
+            );
     }
 
     to {
-        opacity: 1;
+
+        opacity:
+            1;
 
         transform:
-            translateY(0);
+            translateY(
+                0
+            );
     }
 }
 
@@ -1563,146 +1866,374 @@ body.letter-open {
 @media (max-width: 700px) {
 
     .vine {
-        width: 225px;
 
-        height: 108%;
+        width:
+            225px;
+
+        height:
+            108%;
     }
 
     .vine-left {
-        left: -92px;
+
+        left:
+            -92px;
     }
 
     .vine-right {
-        right: -92px;
+
+        right:
+            -92px;
     }
 
-
     .bloom-1 {
-        left: 102px;
-        top: 12%;
 
-        width: 62px;
-        height: 80px;
+        left:
+            102px;
+
+        top:
+            12%;
+
+        width:
+            62px;
+
+        height:
+            80px;
     }
 
     .bloom-2 {
-        right: 102px;
-        top: 16%;
 
-        width: 60px;
-        height: 78px;
+        right:
+            102px;
+
+        top:
+            16%;
+
+        width:
+            60px;
+
+        height:
+            78px;
     }
 
     .bloom-3 {
-        left: 82px;
-        top: 42%;
 
-        width: 60px;
-        height: 78px;
+        left:
+            82px;
+
+        top:
+            42%;
+
+        width:
+            60px;
+
+        height:
+            78px;
     }
 
     .bloom-4 {
-        right: 84px;
-        top: 47%;
 
-        width: 62px;
-        height: 79px;
+        right:
+            84px;
+
+        top:
+            47%;
+
+        width:
+            62px;
+
+        height:
+            79px;
     }
 
     .bloom-5 {
-        left: 106px;
-        bottom: 9%;
 
-        width: 60px;
-        height: 77px;
+        left:
+            106px;
+
+        bottom:
+            9%;
+
+        width:
+            60px;
+
+        height:
+            77px;
     }
 
     .bloom-6 {
-        right: 106px;
-        bottom: 8%;
 
-        width: 59px;
-        height: 76px;
+        right:
+            106px;
+
+        bottom:
+            8%;
+
+        width:
+            59px;
+
+        height:
+            76px;
     }
 
 
     h1 {
-        font-size: 56px;
+
+        font-size:
+            56px;
     }
+
 
     .subtitle {
-        max-width: 290px;
 
-        font-size: 13px;
+        max-width:
+            290px;
+
+        font-size:
+            13px;
     }
+
 
     .password-content h2 {
-        font-size: 46px;
+
+        font-size:
+            46px;
     }
 
+
     #passwordInput {
-        width: 230px;
+
+        width:
+            230px;
     }
 
 
     .archive {
+
         padding:
-            75px 15px 100px;
+            75px
+            15px
+            100px;
     }
+
 
     .archive-header {
-        margin-bottom: 65px;
+
+        margin-bottom:
+            65px;
     }
+
 
     .archive-header h2 {
-        font-size: 48px;
+
+        font-size:
+            48px;
     }
+
 
     .letter-card {
+
         padding:
-            50px 0 60px;
+            50px
+            0
+            60px;
     }
+
 
     .letter-card h3 {
-        font-size: 21px;
+
+        font-size:
+            21px;
     }
+
 
     .envelope-card {
-        width: 97vw;
+
+        width:
+            97vw;
     }
 
-    .letter-paper {
-        width: 88vw;
 
-        height: 80vh;
+    /* =====================================================
+       MOBILE LETTER
+    ====================================================== */
+
+    .letter-overlay {
+
+        align-items:
+            flex-start;
 
         padding:
-            55px 40px;
+            25px
+            0
+            40px;
     }
+
+
+    .letter-paper {
+
+        width:
+            88vw;
+
+        height:
+            auto;
+
+        min-height:
+            78vh;
+
+        max-height:
+            none;
+
+        margin:
+            0
+            auto
+            30px;
+
+        padding:
+            55px
+            30px
+            125px;
+
+        overflow:
+            visible;
+    }
+
+
+    .paper-texture-top {
+
+        height:
+            100px;
+    }
+
+
+    .paper-texture-middle {
+
+        top:
+            90px;
+
+        bottom:
+            90px;
+    }
+
+
+    .paper-texture-bottom {
+
+        height:
+            100px;
+    }
+
 
     .letter-open-title {
-        font-size: 24px;
+
+        font-size:
+            24px;
     }
+
 
     .letter-open-text {
-        font-size: 15px;
 
-        line-height: 1.85;
+        font-size:
+            15px;
+
+        line-height:
+            1.9;
+
+        white-space:
+            pre-wrap;
+
+        overflow-wrap:
+            anywhere;
+
+        text-align:
+            left;
     }
+
 
     .letter-close-button {
-        top: 15px;
-        right: 15px;
 
-        width: 38px;
-        height: 38px;
+        top:
+            15px;
 
-        font-size: 25px;
+        right:
+            15px;
+
+        width:
+            38px;
+
+        height:
+            38px;
+
+        font-size:
+            25px;
     }
+
 
     .overlay-seal {
-        width: 65px;
-        height: 65px;
+
+        width:
+            65px;
+
+        height:
+            65px;
     }
 
+}
+/* =========================================================
+   LETTER PAPER - FINAL BACKGROUND FIX
+========================================================= */
+
+.letter-paper {
+    background: transparent !important;
+}
+
+.letter-paper-background {
+    background: transparent !important;
+}
+
+.paper-texture-top {
+    background-color: transparent !important;
+
+    background-image:
+        url("letter-paper-top.png") !important;
+
+    background-repeat:
+        no-repeat !important;
+
+    background-position:
+        center top !important;
+
+    background-size:
+        100% 100% !important;
+}
+
+.paper-texture-middle {
+    background-color: transparent !important;
+
+    background-image:
+        url("letter-paper-middle.png") !important;
+
+    background-repeat:
+        repeat-y !important;
+
+    background-position:
+        center top !important;
+
+    background-size:
+        100% auto !important;
+}
+
+.paper-texture-bottom {
+    background-color: transparent !important;
+
+    background-image:
+        url("letter-paper-bottom.png") !important;
+
+    background-repeat:
+        no-repeat !important;
+
+    background-position:
+        center bottom !important;
+
+    background-size:
+        100% 100% !important;
 }
